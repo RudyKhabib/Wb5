@@ -28,12 +28,10 @@ img_bytes = image_to_byte_array(img_for_bytes)
 
 api_url = 'http://127.0.0.1:8000/get_answer'
 
-# Данные для отправки в теле запроса
 data = {
   "imgbytes": img_bytes
 }
 
-# Отправка POST-запроса
 response = requests.post(api_url, data=data)
 
 print(resp.content["prob"], resp.content["verdict"])
