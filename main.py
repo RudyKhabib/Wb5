@@ -16,16 +16,16 @@ app = FastAPI()
 vit = get_models.vit()
 w2v = get_models.w2v()
 boosting = get_models.catboostclassifier()
-
+reader = easyocr.Reader(['ru', 'en'])
 
 class ImgBytes(BaseModel):
-    imgbytes: bytes
+    img_bytes: str
 
 
 @app.post('/get_answer')
-def get_answer(img_bytes: ImgBytes):
-    image_path = img_bytes.imgbytes
-    img_bytes = img_bytes.imgbytes
+def get_answer(img_bytes1: ImgBytes):
+    img_str = img_bytes1.img_bytes
+    img_bytes = img_str.encode('latin-1')
     img = Image.open(io.BytesIO(img_bytes))
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     transform = vit_embeds.get_transformations()
@@ -33,7 +33,6 @@ def get_answer(img_bytes: ImgBytes):
     dataloader = DataLoader(
         dataset, batch_size=1, shuffle=False)
     vit_embed = vit_embeds.get_vit_embeds(vit, dataloader, device)
-    reader = easyocr.Reader(['ru', 'en'])
     wrds_lst = reader.readtext(img, detail=0)
     tokenizer = WordPunctTokenizer()
     w2v_embed = w2v_embeds.get_phrase_embedding(tokenizer, wrds_lst, w2v)

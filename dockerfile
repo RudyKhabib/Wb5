@@ -6,4 +6,4 @@ RUN apt-get update && apt-get install libgl1 -y
 
 RUN pip install -r requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "main:app", "--timeout-keep-alive", "90", "--host", "0.0.0.0", "--port", "80"]
