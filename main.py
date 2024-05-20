@@ -13,18 +13,21 @@ from pydantic import BaseModel
 
 
 app = FastAPI()
-vit = get_models.vit()
+
 w2v = get_models.w2v()
 boosting = get_models.catboostclassifier()
+vit = get_models.vit()
+
 reader = easyocr.Reader(['ru', 'en'])
+
 
 class ImgBytes(BaseModel):
     img_bytes: str
 
 
 @app.post('/get_answer')
-def get_answer(img_bytes1: ImgBytes):
-    img_str = img_bytes1.img_bytes
+def get_answer(img_bytes_input: ImgBytes):
+    img_str = img_bytes_input.img_bytes
     img_bytes = img_str.encode('latin-1')
     img = Image.open(io.BytesIO(img_bytes))
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')

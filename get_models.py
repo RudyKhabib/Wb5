@@ -33,7 +33,7 @@ def vit():
     else:
         map_location = 'cpu'
     
-    model.load_state_dict(torch.load('weights/Vit_weights.pth', map_location=map_location))
+    model.load_state_dict(torch.load('Vit_weights.pth', map_location=map_location))
     
     model.heads = nn.Identity()
 
@@ -41,10 +41,10 @@ def vit():
 
 
 def w2v():
-    return KeyedVectors.load("weights/Word2Vec.model")
+    return KeyedVectors.load("Word2Vec.model")
 
 
 def catboostclassifier():
     boosting = catboost.CatBoostClassifier()
-    boosting.load_model('weights/boosting_w2v.bin')
+    boosting.load_model('boosting_w2v.bin')
     return boosting
